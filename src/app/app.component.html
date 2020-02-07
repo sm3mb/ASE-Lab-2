@@ -1,0 +1,78 @@
+<div class="container-fluid bg-image text-white">
+  <div class="center">
+    <div class="row heading-div">
+        <button *ngIf="weatherData" (click)="tryNewCity()" class="btn btn-primary back-button"><i class="fas fa-arrow-left"></i></button>
+        <h1 class="text-white">Weather Report</h1>
+    </div>
+      <div *ngIf="!weatherData && !forecastData">
+        <div class="form-group col-sm-4 center-form-group">
+          <label class="text-white" for="cityName">City</label> <label class="text-danger"> *</label>
+          <input class="form-control" #cityName id="cityName" pattern="[a-zA-Z ]*" placeholder="Enter City">
+        </div>
+        <div *ngIf="cityNameAlert" class="col-sm-4 alert alert-warning center-form-group" role="alert">
+            City Name should not be empty!
+        </div>
+        <div class="form-group col-sm-4 center-form-group">
+          <label class="text-white" for="stateName">State</label>
+          <input class="form-control" #stateName id="stateName" placeholder="Enter State">
+        </div>
+        <div *ngIf="apiNotFoundError" class="col-sm-4 alert alert-warning center-form-group" role="alert">
+            Please check City/State Name!!!
+        </div>
+        <button (click)="onWeather(cityName.value, stateName.value)" class="btn btn-primary">Get Weather Details</button>
+        <!-- &nbsp;
+        <button (click)="onHourlyForecast(cityName.value, stateName.value)" class="btn btn-primary">Hourly Forecast</button> -->
+        <div *ngIf="apiServerError" class="col-sm-4 alert alert-warning center-form-group" role="alert">
+            Server is down. Please Try again!!!
+        </div>
+      </div>
+  </div>
+  
+  <div class="row">
+      <div class="col-md-3 center weather-overview bg-text" *ngIf="weatherData">
+          <h3>Current Forecast</h3>
+          <p>City Name : {{this.weatherData.name}}</p>
+          <p>Country : {{this.weatherData.sys.country}}</p>
+          <p>Weather Description: {{this.weatherData.weather[0].description}}</p>
+          <p>Temperature : {{((this.weatherData.main.temp-273.15)*1.8)+32 | number : '1.2-2'}}F</p>
+          <p>Wind : {{this.weatherData.wind.speed}}mph</p>
+          <p>Pressure : {{this.weatherData.main.pressure}}hpa</p>
+          <p>Humidity : {{this.weatherData.main.humidity}}%</p>
+        </div>
+      
+        <div class="col-md-9 bg-text" *ngIf="forecastData">
+          <h3>Hourly Forecast</h3>
+          <table class="table text-white center">
+              <thead>
+                <tr>
+                  <!-- <th scope="col">Date Time</th> -->
+                  <th scope='col'></th>
+                  <th scope="col">Description</th>
+                  <th scope="col">Temperature</th>
+                  <th scope="col">Wind</th>
+                  <th scope="col">Pressure</th>
+                  <th scope="col">Humidity</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let hourList of this.forecastData.list | slice:0:5;">
+                  <!-- <th scope="row">{{ hourList.dt | date }}</th> -->
+                  <td><i *ngIf="hourList.weather[0].main == 'Clouds'" class="fas fa-cloud"></i>
+                    <i *ngIf="hourList.weather[0].main == 'Cloud Rain'" class="fas fa-cloud-sun-rain"></i>
+                    <i *ngIf="hourList.weather[0].main == 'Clear'" class="fas fa-cloud-sun"></i>
+                    <i *ngIf="hourList.weather[0].main == 'Rain'" class="fas fa-cloud-showers-heavy"></i>
+                    <i *ngIf="hourList.weather[0].main == 'Snow'" class="fas fa-snowflake"></i>
+                    <i *ngIf="hourList.weather[0].main == 'SunnyCloud'" class="fas fa-cloud-sun"></i>
+                    <i *ngIf="hourList.weather[0].main == 'Sunny'" class="fas fa-sun"></i>
+                    <i *ngIf="hourList.weather[0].main == 'Wind'" class="fas fa-wind"></i></td>
+                  <td>{{hourList.weather[0].description}}</td>
+                  <td>{{((hourList.main.temp-273.15)*1.8)+32 | number : '1.2-2'}}F</td>
+                  <td>{{hourList.wind.speed}}mph</td>
+                  <td>{{hourList.main.pressure}}hpa</td>
+                  <td>{{hourList.main.humidity}}%</td>
+                </tr>
+              </tbody>
+            </table>
+        </div>
+  </div>
+</div>

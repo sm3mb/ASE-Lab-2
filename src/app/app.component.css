@@ -1,0 +1,17 @@
+.center {
+    text-align: center;
+}
+
+.center-form-group { 
+    left: 32vw;
+}
+
+.bg-text {
+    background-color: rgba(0,0,0, 0.4);
+    font-weight: bold;
+    border: 2px solid #f1f1f1;
+    width: 40%;
+    margin-top: 8%;
+    position: relative;
+    padding: 5px;
+}
